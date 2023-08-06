@@ -151,7 +151,7 @@ const NewCollectionPopover = ({
       addNewCollection(targetValue);
     }
   }
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<null | HTMLInputElement>(null);
   return (
     <Popover
       isOpen={isOpen}
@@ -174,7 +174,12 @@ const NewCollectionPopover = ({
           <PopoverBody>
             <Input
               title="New Collection Name"
-              ref={inputRef}
+              ref={(element: HTMLInputElement) => {
+                if (element) {
+                  element.focus()
+                  inputRef.current = element;
+                }
+              }}
               placeholder="Collection Name"
               onBlur={addCollection}
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -721,10 +726,8 @@ export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   // Input Refs
-  const searchInput = useRef<HTMLInputElement>(null);
-  // const renameCollectionInput = useRef<() => void | HTMLInputElement>(null);
+  const searchInput = useRef<null | HTMLInputElement>(null);
   const renameCollectionInput = useRef<null | HTMLInputElement>(null);
-  // const renameCollectionInput = useRef(null);
 
   const addItemToCollection = useCallback((collectionName: string, objectID: number) => {
     const collection = collections[collectionName];
@@ -894,7 +897,6 @@ export default function Home() {
               let [key, value] = entry;
               if (['objectID', 'loading'].includes(key) || !value) return null
               let body = null;
-              console.log('test')
               if (typeof value === 'string') {
                 if (value.startsWith('http')) {
                   body = <>
@@ -948,7 +950,6 @@ export default function Home() {
                     <Text>{value}</Text>
                 </>
               }
-              console.log(ITEM_DISPLAY.displayNames);
               key = ITEM_DISPLAY.displayNames[key] || key;
               return <Flex key={key} direction="column" my="1">
                 <Text mr="1" fontWeight="bold">{`${key}:`}</Text>
@@ -1181,7 +1182,10 @@ export default function Home() {
               >
                 <InputGroup size='lg'>
                   <Input 
-                    ref={searchInput}
+                    ref={(input: HTMLInputElement) => {
+                      input?.focus();
+                      searchInput.current = input;
+                    }}
                     type="text"
                     placeholder="show me dragons"
                     defaultValue={searchTerm}
