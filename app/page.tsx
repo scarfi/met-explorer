@@ -591,6 +591,7 @@ const Sidebar = ({
       }
       userSelect="none"
       flex={`0 0 ${SIDEBAR_WIDTH}px`}
+      width={`${SIDEBAR_WIDTH}px`}
       minWidth="0"
       h="100%"
       direction="column"
@@ -973,7 +974,7 @@ export default function Home() {
           {small &&
             <IconButton
               position="absolute"
-              left="20px"
+              left="15px"
               top="20px"
               aria-label={sidebarOpen ? "Close Sidebar" : "Open Sidebar"}
               icon={sidebarOpen ? <ChevronLeftIcon /> : <ChevronRightIcon />}
@@ -1119,9 +1120,7 @@ export default function Home() {
                   type="text"
                   ref={(input: HTMLInputElement) => {
                     input?.focus();
-                    // if (renameCollectionInput) {
                     renameCollectionInput.current = input;
-                    // }
                   }}
                   placeholder={view.collectionName}
                   defaultValue={view.collectionName}
@@ -1161,6 +1160,8 @@ export default function Home() {
                 position="absolute"
                 top="25px"
                 left="50%"
+                width={small ? '90%' : 'auto'}
+                maxWidth="300px"
                 transform="translateX(-50%)"
               >
                 <InputGroup size='lg'>
@@ -1169,6 +1170,7 @@ export default function Home() {
                     type="text"
                     placeholder="show me dragons"
                     defaultValue={searchTerm}
+                    minWidth="250px"
                     backgroundColor="rgba(255,255,255,0.5)"
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
