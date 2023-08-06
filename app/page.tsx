@@ -1,5 +1,5 @@
 "use client"
-import React, {useEffect, useState, useRef, useMemo, useCallback, SetStateAction} from 'react'
+import React, {ReactNode, useEffect, useState, useRef, useMemo, useCallback, SetStateAction} from 'react'
 import { theme } from '../theme'
 import {
   Link,
@@ -145,9 +145,9 @@ const NewCollectionPopover = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const addCollection = (event: React.FocusEvent<HTMLInputElement> | React.KeyboardEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    if (value && !collections[value]) {
-      addNewCollection(value);
+    const targetValue = 'value' in event.target ? event.target.value : '';
+    if (targetValue && !collections[targetValue]) {
+      addNewCollection(targetValue);
     }
   }
   const inputRef = useRef<HTMLInputElement>(null);
@@ -257,8 +257,8 @@ const ConfirmDestructionPopover = ({
   children,
 }: {
   confirm: Function,
-  confirmText: string
-  children: React.Node,
+  confirmText: string,
+  children: ReactNode,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -720,7 +720,9 @@ export default function Home() {
 
   // Input Refs
   const searchInput = useRef<HTMLInputElement>(null);
-  const renameCollectionInput = useRef<HTMLInputElement>(null);
+  // const renameCollectionInput = useRef<() => void | HTMLInputElement>(null);
+  const renameCollectionInput = useRef<null | HTMLInputElement>(null);
+  // const renameCollectionInput = useRef(null);
 
   const addItemToCollection = useCallback((collectionName: string, objectID: number) => {
     const collection = collections[collectionName];
@@ -899,6 +901,10 @@ export default function Home() {
                       </Link>
                     </>
                 } else if (key === 'department') {
+                  let color = '#FFF';
+                  if (Object.keys(DEPARTMENTS).includes(value)) {
+                    color = DEPARTMENTS[value].color;
+                  }
                   body = <Flex alignItems="center">
                     <Text>{value}</Text>
                     <Box
@@ -906,7 +912,7 @@ export default function Home() {
                       width="15px"
                       height="15px"
                       borderRadius="50%"
-                      backgroundColor={DEPARTMENTS[value]?.color || '#FFF'}
+                      backgroundColor={color}
                      > 
                     </Box>
                   </Flex>
@@ -940,6 +946,7 @@ export default function Home() {
                     <Text>{value}</Text>
                 </>
               }
+              console.log(ITEM_DISPLAY.displayNames);
               key = ITEM_DISPLAY.displayNames[key] || key;
               return <Flex key={key} direction="column" my="1">
                 <Text mr="1" fontWeight="bold">{`${key}:`}</Text>
@@ -1110,9 +1117,11 @@ export default function Home() {
                 {editingCollectionName
                 ? <Input
                   type="text"
-                  ref={(input) => {
+                  ref={(input: HTMLInputElement) => {
                     input?.focus();
+                    // if (renameCollectionInput) {
                     renameCollectionInput.current = input;
+                    // }
                   }}
                   placeholder={view.collectionName}
                   defaultValue={view.collectionName}
@@ -1126,7 +1135,8 @@ export default function Home() {
                         renameCollectionInput.current.blur();
                       }
                     } else if (e.key === 'Enter') {
-                      renameCollection(view.collectionName, e.target.value);
+                      const target = e.target as HTMLInputElement;
+                      renameCollection(view.collectionName, target.value);
                       setEditingCollectionName(false);
                     }
                   }}
@@ -1217,7 +1227,13 @@ export default function Home() {
   )
 }
 
-var DEPARTMENTS = {
+type DepartmentsType = {
+  [key: string]: {
+    departmentId: number,
+    color: string,
+  }
+}
+var DEPARTMENTS: DepartmentsType = {
   "American Decorative Arts": {
     departmentId: 1,
     color: "#D9ED92",
@@ -1304,7 +1320,13 @@ var DEPARTMENTS = {
   },
 }
 
-var ITEM_DISPLAY = {
+type ItemDisplayType = {
+  sortOrder: string[],
+  displayNames: {
+    [key: string]: string,
+  },
+}
+var ITEM_DISPLAY: ItemDisplayType = {
   sortOrder: [
     'title',
     'artistDisplayName',
