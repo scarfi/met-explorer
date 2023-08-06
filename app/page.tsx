@@ -2,6 +2,7 @@
 import React, {ReactNode, useEffect, useState, useRef, useMemo, useCallback, SetStateAction} from 'react'
 import { theme } from '../theme'
 import {
+  Image,
   Link,
   Input,
   Button,
@@ -694,7 +695,7 @@ const Sidebar = ({
 }
 
 export default function Home() {
-  const {width} = useViewport();
+  const {width, height} = useViewport();
   const [collections, setCollections] = useState<CollectionsType>({});
   useEffect(() => {
     const savedCollections = localStorage.getItem('metCollections');
@@ -1038,6 +1039,20 @@ export default function Home() {
                 <Text mt="5">
                   NO RESULTS
                 </Text>
+              }
+              {(view.type === 'search' && view.searchTerm === '') &&
+                <Image
+                  src="/met.jpeg"
+                  alt="met-museum"
+                  position="absolute"
+                  left="50%"
+                  top="100px"
+                  borderRadius="10%"
+                  boxShadow="0 0 3px 3px #982932"
+                  transform="translateX(-50%)"
+                  width={`${Math.min(width, height) * .8}px`}
+                  height={`${Math.min(width, height) * .8}px`}
+                />
               }
               {galleryPage.map((objectID: number, index: number) => {
                 return <GalleryItem
