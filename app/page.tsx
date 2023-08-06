@@ -1046,12 +1046,12 @@ export default function Home() {
                   alt="met-museum"
                   position="absolute"
                   left="50%"
-                  top="100px"
+                  top="50%"
                   borderRadius="10%"
                   boxShadow="0 0 3px 3px #982932"
-                  transform="translateX(-50%)"
-                  width={`${Math.min(width, height) * .8}px`}
-                  height={`${Math.min(width, height) * .8}px`}
+                  transform="translate(-50%, -43%)"
+                  width={`${Math.min(600, Math.min(width * .8, (height - 180) * .9))}px`}
+                  height={`${Math.min(600, Math.min(width * .8, (height - 180) * .9))}px`}
                 />
               }
               {galleryPage.map((objectID: number, index: number) => {
