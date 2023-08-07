@@ -239,7 +239,7 @@ const AddToCollectionPopover = ({
                   mr="2"
                   mb="2"
                   colorScheme='brand'
-                  disabled={ids.indexOf(objectID) > -1}
+                  isDisabled={ids.indexOf(objectID) > -1 ? true : false}
                   onClick={(e) => {
                     e.stopPropagation();
                     setIsOpen(false);
@@ -536,7 +536,7 @@ const GalleryItem = ({
           bottom="5px"
           left="5px"
           aria-label="Add to Collection"
-          backgroundColor='rgba(255,255,255,0.2)'
+          backgroundColor='rgba(255,255,255,0.4)'
           isRound={true}
           variant="outline"
           colorScheme="brand"
