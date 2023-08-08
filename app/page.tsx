@@ -1187,7 +1187,7 @@ export default function Home() {
                       searchInput.current = input;
                     }}
                     type="text"
-                    placeholder="show me dragons"
+                    placeholder="show me dragon"
                     defaultValue={searchTerm}
                     minWidth="250px"
                     backgroundColor="rgba(255,255,255,0.5)"
